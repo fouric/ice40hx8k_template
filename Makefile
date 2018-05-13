@@ -1,7 +1,7 @@
 .PHONY: prepare upload clean tb
 
 PROJECT = example
-PCF = ice40hx8k-evn-b.pcf
+PCF = example.pcf
 SRCS = $(filter-out $(PROJECT).v, $(filter-out %_tb.v, $(wildcard *.v)))
 TBS = $(wildcard *_tb.v)
 VCDS = $(TBS:_tb.v=.vcd)
@@ -56,7 +56,7 @@ example.bin: example.txt
 	icepack example.txt example.bin && rm example.txt
 
 example.txt: example.blif
-	arachne-pnr -d 8k -p example-8k.pcf -o example.txt example.blif && rm example.blif
+	arachne-pnr -d 8k -p example.pcf -o example.txt example.blif && rm example.blif
 
 example.blif: example.v
 	yosys -p "read_verilog example.v; synth_ice40 -blif example.blif"
