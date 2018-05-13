@@ -1,6 +1,6 @@
-.PHONY: prepare upload clean tb 8k sim
+.PHONY: prepare upload clean tb
 
-PROJECT = top
+PROJECT = example
 PCF = ice40hx8k-evn-b.pcf
 SRCS = $(filter-out $(PROJECT).v, $(filter-out %_tb.v, $(wildcard *.v)))
 TBS = $(wildcard *_tb.v)
@@ -48,15 +48,6 @@ prepare:
 	cd yodl;./configure;cd -
 	cd yodl/vhdlpp;make -j9;sudo make install;cd -
 	sudo echo 'ACTION=="add", ATTR{idVendor}=="0403", ATTR{idProduct}=="6010", MODE:="666"' >/etc/udev/rules.d/53-lattice-ftdi.rules
-
-
-8k: sim upload
-
-sim: example.v example_tb.v
-	iverilog -o example_tb example.v example_tb.v
-	./example_tb
-	gtkwave example_tb.vcd
-
 
 upload: example.bin
 	sudo iceprog example.bin && rm example.bin
